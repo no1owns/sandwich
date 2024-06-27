@@ -1,2 +1,0 @@
-# site-prime
-main-site
