@@ -14,7 +14,6 @@ async function addSandwich(sandwich) {
   }
 }
 
-// Function to fetch sandwiches
 async function fetchSandwiches() {
   const { data, error } = await supabase
     .from('sandwiches')
@@ -28,6 +27,21 @@ async function fetchSandwiches() {
   }
 }
 
+// Example usage: fetch and display sandwiches
+document.addEventListener('DOMContentLoaded', async () => {
+  const sandwiches = await fetchSandwiches();
+  const sandwichList = document.getElementById('sandwich-list');
+
+  sandwiches.forEach(sandwich => {
+    const listItem = document.createElement('li');
+    listItem.innerHTML = `
+      <h3>${sandwich.name}</h3>
+      <p>${sandwich.description}</p>
+      <img src="${sandwich.photo_url}" alt="${sandwich.name}" width="200">
+    `;
+    sandwichList.appendChild(listItem);
+  });
+});
 // Example usage
 document.addEventListener('DOMContentLoaded', () => {
   fetchSandwiches().then(sandwiches => {
