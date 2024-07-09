@@ -57,7 +57,7 @@
     async function fetchSandwiches() {
       const { data, error } = await supabase
         .from('sandwiches')
-        .select('*');
+        .select('photo_url, description, user_id');
 
       if (error) {
         console.error('Error fetching sandwiches:', error.message);
