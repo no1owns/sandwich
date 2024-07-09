@@ -9,14 +9,14 @@ document.getElementById('photo-upload-form').addEventListener('submit', async (e
   if (file && description) {
     const fileName = `${Date.now()}-${file.name}`; // Ensure unique file names
 
-    const { data, error } = await supabase.storage
+    const { data: uploadData, error: uploadError } = await supabase.storage
       .from('photos')
       .upload(`public/${fileName}`, file);
 
-    if (error) {
-      console.error('Error uploading photo:', error.message);
+    if (uploadError) {
+      console.error('Error uploading photo:', uploadError.message);
     } else {
-      console.log('Photo uploaded:', data);
+      console.log('Photo uploaded:', uploadData);
       const { publicURL } = supabase.storage
         .from('photos')
         .getPublicUrl(`public/${fileName}`);
