@@ -4,8 +4,9 @@ import { supabase } from '../src/supabaseConfig.js';
 document.getElementById('photo-upload-form').addEventListener('submit', async (e) => {
   e.preventDefault();
   const file = document.getElementById('photo-upload').files[0];
+  const description = document.getElementById('photo-description').value;
 
-  if (file) {
+  if (file && description) {
     const { data, error } = await supabase.storage
       .from('photos')
       .upload(`public/${file.name}`, file);
@@ -17,17 +18,17 @@ document.getElementById('photo-upload-form').addEventListener('submit', async (e
       const photoUrl = supabase.storage.from('photos').getPublicUrl(`public/${file.name}`).publicURL;
       console.log('Photo URL:', photoUrl);
 
-      // Save the photo URL to the sandwich record
-      const sandwichId = 'your-sandwich-id'; // Replace with actual sandwich ID
-      const { data: updateData, error: updateError } = await supabase
+      // Save the photo URL and description to the sandwiches table
+      const { data: sandwichData, error: insertError } = await supabase
         .from('sandwiches')
-        .update({ photo_url: photoUrl })
-        .eq('id', sandwichId);
+        .insert([{ photo_url: photoUrl, description }]);
 
-      if (updateError) {
-        console.error('Error updating sandwich record:', updateError.message);
+      if (insertError) {
+        console.error('Error saving sandwich:', insertError.message);
       } else {
-        console.log('Sandwich record updated:', updateData);
+        console.log('Sandwich saved:', sandwichData);
+        // Refresh the sandwich list
+        await fetchSandwiches();
       }
     }
   }

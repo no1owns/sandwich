@@ -7,40 +7,21 @@
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <h1>Sandwich Logger App</h1> 
-
-  
-  <!-- Sign-Up Form -->
-<form id="sign-up-form">
-  <button id="sign-up-google" type="button">Sign Up with Google</button>
-  <button id="sign-up-apple" type="button">Sign Up with Apple</button>
-</form>
-
-<!-- Login Form -->
-<form id="login-form">
-  <button id="login-google" type="button">Log In with Google</button>
-  <button id="login-apple" type="button">Log In with Apple</button>
-</form>
-
+  <h1>Sandwich Logger App</h1>
 
   <!-- Photo Upload Form -->
+  <h2>Upload a Sandwich Photo</h2>
   <form id="photo-upload-form">
     <input type="file" id="photo-upload" required>
+    <input type="text" id="photo-description" placeholder="Description" required>
     <button type="submit">Upload Photo</button>
   </form>
 
   <!-- Sandwich List Container -->
-<ul id="sandwich-list"></ul>
+  <h2>Sandwich List</h2>
+  <ul id="sandwich-list"></ul>
 
-
-  <!-- Google Maps Integration -->
-  <div id="map"></div>
-
-  <script src="signUp.js"></script>
-  <script src="login.js"></script>
-  <script src="dataOperations.js"></script>
   <script src="photoUpload.js"></script>
-  <script src="googleMaps.js"></script>
-  <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initMap" async defer></script>
+  <script src="dataOperations.js"></script>
 </body>
 </html>
