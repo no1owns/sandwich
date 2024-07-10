@@ -4,9 +4,11 @@ import { supabase } from '../src/supabaseConfig.js';
 document.getElementById('photo-upload-form').addEventListener('submit', async (e) => {
   e.preventDefault();
   const file = document.getElementById('photo-upload').files[0];
+  const name = document.getElementById('sandwich-name').value;
   const description = document.getElementById('photo-description').value;
+  const dummyUserId = '00000000-0000-0000-0000-000000000000'; // Dummy user ID for testing
 
-  if (file && description) {
+  if (file && name && description) {
     const fileName = `${Date.now()}-${file.name}`; // Ensure unique file names
 
     const { data: uploadData, error: uploadError } = await supabase.storage
@@ -22,10 +24,10 @@ document.getElementById('photo-upload-form').addEventListener('submit', async (e
         .getPublicUrl(`public/${fileName}`);
       console.log('Photo URL:', publicURL);
 
-      // Save the photo URL and description to the sandwiches table
+      // Save the photo URL, name, description, and dummy user ID to the sandwiches table
       const { data: sandwichData, error: insertError } = await supabase
         .from('sandwiches')
-        .insert([{ photo_url: publicURL, description }]);
+        .insert([{ name, photo_url: publicURL, description, user_id: dummyUserId }]);
 
       if (insertError) {
         console.error('Error saving sandwich:', insertError.message);
