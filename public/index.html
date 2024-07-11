@@ -41,7 +41,7 @@
           console.log('Photo uploaded:', uploadData);
 
           // Generate public URL for the uploaded file
-          const { publicURL, error: urlError } = supabase.storage
+          const { data: publicUrlData, error: urlError } = supabase.storage
             .from('photos')
             .getPublicUrl(`public/${fileName}`);
 
@@ -50,6 +50,7 @@
             return;
           }
 
+          const publicURL = publicUrlData.publicURL;
           console.log('Public URL:', publicURL);
 
           // Save the photo URL, name, description, and type to the sandwiches table
