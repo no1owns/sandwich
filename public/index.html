@@ -55,7 +55,7 @@
           // Save the photo URL, name, description, and type to the sandwiches table
           const { data: sandwichData, error: insertError } = await supabase
             .from('sandwiches')
-            .insert([{ name, photo_url: publicURL.publicURL, description, type }]);
+            .insert([{ name, photo_url: publicURL, description, type }]);
 
           if (insertError) {
             console.error('Error saving sandwich:', insertError.message);
@@ -71,7 +71,7 @@
       async function fetchSandwiches() {
         const { data, error } = await supabase
           .from('sandwiches')
-          .select('photo_url, description, name');
+          .select('photo_url, description, name, type');
 
         if (error) {
           console.error('Error fetching sandwiches:', error.message);
@@ -89,6 +89,7 @@
           const listItem = document.createElement('li');
           listItem.innerHTML = `
             <h3>${sandwich.name}</h3>
+            <p>Type: ${sandwich.type}</p>
             <p>${sandwich.description}</p>
             <img src="${sandwich.photo_url}" alt="Sandwich Image" width="200">
           `;
