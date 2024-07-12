@@ -7,12 +7,13 @@
   <link rel="stylesheet" href="styles.css">
   <!-- Load Supabase from CDN -->
   <script type="module">
-    import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
+   import { createClient } from '@supabase/supabase-js';
 
     const supabaseUrl = 'https://uzjaizmdgwfyiixwspdp.supabase.co';
     const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV6amFpem1kZ3dmeWlpeHdzcGRwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTk0NTAyNTUsImV4cCI6MjAzNTAyNjI1NX0.7HEUiRGbVWTv8St_PEcwiTVjazkCRDwK324oPJuF7Ns';
 
-    const supabase = createClient(supabaseUrl, supabaseKey);
+    export const supabase = createClient(supabaseUrl, supabaseKey);
+
 
     document.addEventListener('DOMContentLoaded', () => {
       // Photo Upload
@@ -41,23 +42,29 @@
           console.log('Photo uploaded:', uploadData);
 
           // Generate public URL for the uploaded file
-          const { publicURL } = supabase.storage
+          const { publicURL, error: urlError } = supabase.storage
             .from('photos')
             .getPublicUrl(`public/${fileName}`);
 
           console.log('Public URL Object:', publicURL);
 
-          if (!publicURL) {
+          if (urlError) {
+            console.error('Error getting public URL:', urlError.message);
+            return;
+          }
+
+          const photoUrl = publicURL.publicURL;
+          console.log('Public URL:', photoUrl);
+
+          if (!photoUrl) {
             console.error('Public URL is null or undefined');
             return;
           }
 
-          console.log('Public URL:', publicURL.publicURL);
-
           // Save the photo URL, name, description, and type to the sandwiches table
           const { data: sandwichData, error: insertError } = await supabase
             .from('sandwiches')
-            .insert([{ name, photo_url: publicURL.publicURL, description, type }]);
+            .insert([{ name, photo_url: photoUrl, description, type }]);
 
           if (insertError) {
             console.error('Error saving sandwich:', insertError.message);
