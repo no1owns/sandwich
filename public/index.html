@@ -41,7 +41,8 @@
           console.log('Photo uploaded:', uploadData);
 
           // Generate public URL for the uploaded file
-          const { data: publicUrlData, error: urlError } = supabase.storage
+          const { publicURL, error: urlError } = supabase
+            .storage
             .from('photos')
             .getPublicUrl(`public/${fileName}`);
 
@@ -50,7 +51,6 @@
             return;
           }
 
-          const publicURL = publicUrlData.publicURL;
           console.log('Public URL:', publicURL);
 
           // Debugging: Ensure publicURL is not null
@@ -62,7 +62,7 @@
           // Save the photo URL, name, description, and type to the sandwiches table
           const { data: sandwichData, error: insertError } = await supabase
             .from('sandwiches')
-            .insert([{ name, photo_url: publicURL, description, type }]);
+            .insert([{ name, photo_url: publicURL.publicURL, description, type }]);
 
           if (insertError) {
             console.error('Error saving sandwich:', insertError.message);
