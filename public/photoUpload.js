@@ -1,41 +1,93 @@
-// public/photoUpload.js
-import { supabase } from '../src/supabaseConfig.js';
+// src/photoUpload.js
+import { supabase } from './supabaseConfig.js';
 
 document.getElementById('photo-upload-form').addEventListener('submit', async (e) => {
   e.preventDefault();
+  
   const file = document.getElementById('photo-upload').files[0];
   const name = document.getElementById('sandwich-name').value;
   const description = document.getElementById('photo-description').value;
-  const dummyUserId = '00000000-0000-0000-0000-000000000000'; // Dummy user ID for testing
+  const type = document.getElementById('sandwich-type').value;
 
-  if (file && name && description) {
+  if (file && name && description && type) {
     const fileName = `${Date.now()}-${file.name}`; // Ensure unique file names
 
+    console.log('Uploading file:', fileName);
+
+    // Upload the file
     const { data: uploadData, error: uploadError } = await supabase.storage
       .from('photos')
       .upload(`public/${fileName}`, file);
 
     if (uploadError) {
       console.error('Error uploading photo:', uploadError.message);
+      return;
+    }
+
+    console.log('Photo uploaded:', uploadData);
+
+    // Generate public URL for the uploaded file
+    const { data: publicUrlData, error: urlError } = await supabase.storage
+      .from('photos')
+      .getPublicUrl(`public/${fileName}`);
+
+    if (urlError) {
+      console.error('Error getting public URL:', urlError.message);
+      return;
+    }
+
+    const publicURL = publicUrlData.publicURL;
+    console.log('Public URL:', publicURL);
+
+    if (!publicURL) {
+      console.error('Public URL is null or undefined');
+      return;
+    }
+
+    // Save the photo URL, name, description, and type to the sandwiches table
+    const { data: sandwichData, error: insertError } = await supabase
+      .from('sandwiches')
+      .insert([{ name, photo_url: publicURL, description, type }]);
+
+    if (insertError) {
+      console.error('Error saving sandwich:', insertError.message);
     } else {
-      console.log('Photo uploaded:', uploadData);
-      const { publicURL } = supabase.storage
-        .from('photos')
-        .getPublicUrl(`public/${fileName}`);
-      console.log('Photo URL:', publicURL);
-
-      // Save the photo URL, name, description, and dummy user ID to the sandwiches table
-      const { data: sandwichData, error: insertError } = await supabase
-        .from('sandwiches')
-        .insert([{ name, photo_url: publicURL, description, user_id: dummyUserId }]);
-
-      if (insertError) {
-        console.error('Error saving sandwich:', insertError.message);
-      } else {
-        console.log('Sandwich saved:', sandwichData);
-        // Refresh the sandwich list
-        await fetchSandwiches();
-      }
+      console.log('Sandwich saved:', sandwichData);
+      // Refresh the sandwich list
+      await fetchSandwiches();
     }
   }
 });
+
+// Fetch and Display Sandwiches
+async function fetchSandwiches() {
+  const { data, error } = await supabase
+    .from('sandwiches')
+    .select('photo_url, description, name, type');
+
+  if (error) {
+    console.error('Error fetching sandwiches:', error.message);
+  } else {
+    console.log('Sandwiches fetched:', data);
+    displaySandwiches(data);
+  }
+}
+
+function displaySandwiches(sandwiches) {
+  const sandwichList = document.getElementById('sandwich-list');
+  sandwichList.innerHTML = '';
+
+  sandwiches.forEach(sandwich => {
+    const listItem = document.createElement('li');
+    listItem.innerHTML = `
+      <h3>${sandwich.name}</h3>
+      <p>Type: ${sandwich.type}</p>
+      <p>${sandwich.description}</p>
+      <img src="${sandwich.photo_url}" alt="Sandwich Image" width="200">
+    `;
+    sandwichList.appendChild(listItem);
+  });
+}
+
+// Initial fetch of sandwiches
+document.addEventListener('DOMContentLoaded', fetchSandwiches);
