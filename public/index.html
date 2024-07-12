@@ -21,6 +21,8 @@
         const file = document.getElementById('photo-upload').files[0];
         const name = document.getElementById('sandwich-name').value;
         const description = document.getElementById('photo-description').value;
+        const dummyUserId = '00000000-0000-0000-0000-000000000000'; // Dummy user ID for testing
+
 
         if (file && name && description) {
           const fileName = `${Date.now()}-${file.name}`; // Ensure unique file names
