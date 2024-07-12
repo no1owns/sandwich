@@ -15,8 +15,8 @@
     const supabase = createClient(supabaseUrl, supabaseKey);
 
     document.addEventListener('DOMContentLoaded', () => {
-     // Photo Upload
-     document.getElementById('photo-upload-form').addEventListener('submit', async (e) => {
+      // Photo Upload
+      document.getElementById('photo-upload-form').addEventListener('submit', async (e) => {
         e.preventDefault();
         const file = document.getElementById('photo-upload').files[0];
         const name = document.getElementById('sandwich-name').value;
@@ -52,6 +52,12 @@
 
           const publicURL = publicUrlData.publicURL;
           console.log('Public URL:', publicURL);
+
+          // Debugging: Ensure publicURL is not null
+          if (!publicURL) {
+            console.error('Public URL is null or undefined');
+            return;
+          }
 
           // Save the photo URL, name, description, and type to the sandwiches table
           const { data: sandwichData, error: insertError } = await supabase
