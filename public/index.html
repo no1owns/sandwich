@@ -41,7 +41,7 @@
           console.log('Photo uploaded:', uploadData);
 
           // Generate public URL for the uploaded file
-          const { data, error: urlError } = supabase.storage
+          const { publicURL, error: urlError } = supabase.storage
             .from('photos')
             .getPublicUrl(`public/${fileName}`);
 
@@ -50,7 +50,6 @@
             return;
           }
 
-          const publicURL = data.publicURL;
           console.log('Public URL:', publicURL);
 
           if (!publicURL) {
