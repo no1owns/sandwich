@@ -15,17 +15,18 @@
     const supabase = createClient(supabaseUrl, supabaseKey);
 
     document.addEventListener('DOMContentLoaded', () => {
-      // Photo Upload
-      document.getElementById('photo-upload-form').addEventListener('submit', async (e) => {
+     // Photo Upload
+     document.getElementById('photo-upload-form').addEventListener('submit', async (e) => {
         e.preventDefault();
         const file = document.getElementById('photo-upload').files[0];
         const name = document.getElementById('sandwich-name').value;
         const description = document.getElementById('photo-description').value;
-        const dummyUserId = '00000000-0000-0000-0000-000000000000'; // Dummy user ID for testing
+        const type = document.getElementById('sandwich-type').value;
 
-
-        if (file && name && description) {
+        if (file && name && description && type) {
           const fileName = `${Date.now()}-${file.name}`; // Ensure unique file names
+
+          console.log('Uploading file:', fileName);
 
           // Upload the file
           const { data: uploadData, error: uploadError } = await supabase.storage
@@ -40,7 +41,7 @@
           console.log('Photo uploaded:', uploadData);
 
           // Generate public URL for the uploaded file
-          const { publicURL, error: urlError } = supabase.storage
+          const { data: publicUrlData, error: urlError } = supabase.storage
             .from('photos')
             .getPublicUrl(`public/${fileName}`);
 
@@ -49,12 +50,13 @@
             return;
           }
 
-          console.log('Photo URL:', publicURL);
+          const publicURL = publicUrlData.publicURL;
+          console.log('Public URL:', publicURL);
 
-          // Save the photo URL, name, and description to the sandwiches table
+          // Save the photo URL, name, description, and type to the sandwiches table
           const { data: sandwichData, error: insertError } = await supabase
             .from('sandwiches')
-            .insert([{ name, photo_url: publicURL, description }]);
+            .insert([{ name, photo_url: publicURL, description, type }]);
 
           if (insertError) {
             console.error('Error saving sandwich:', insertError.message);
@@ -70,7 +72,7 @@
       async function fetchSandwiches() {
         const { data, error } = await supabase
           .from('sandwiches')
-          .select('photo_url, description, name');
+          .select('photo_url, description, name, type');
 
         if (error) {
           console.error('Error fetching sandwiches:', error.message);
@@ -88,6 +90,7 @@
           const listItem = document.createElement('li');
           listItem.innerHTML = `
             <h3>${sandwich.name}</h3>
+            <p>Type: ${sandwich.type}</p>
             <p>${sandwich.description}</p>
             <img src="${sandwich.photo_url}" alt="Sandwich Image" width="200">
           `;
@@ -109,6 +112,11 @@
     <input type="text" id="sandwich-name" placeholder="Sandwich Name" required>
     <input type="file" id="photo-upload" required>
     <input type="text" id="photo-description" placeholder="Description" required>
+    <select id="sandwich-type" required>
+      <option value="" disabled selected>Select Sandwich Type</option>
+      <option value="establishment">Establishment</option>
+      <option value="homemade">Homemade</option>
+    </select>
     <button type="submit">Upload Photo</button>
   </form>
 
