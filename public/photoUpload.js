@@ -27,7 +27,7 @@ document.getElementById('photo-upload-form').addEventListener('submit', async (e
     console.log('Photo uploaded:', uploadData);
 
     // Generate public URL for the uploaded file
-    const { data: publicUrlData, error: urlError } = await supabase.storage
+    const { publicUrl, error: urlError } = supabase.storage
       .from('photos')
       .getPublicUrl(`public/${fileName}`);
 
@@ -36,10 +36,12 @@ document.getElementById('photo-upload-form').addEventListener('submit', async (e
       return;
     }
 
-    const publicURL = publicUrlData.publicURL;
-    console.log('Public URL:', publicURL);
+    console.log('Public URL Data:', publicUrl);
 
-    if (!publicURL) {
+    const photoUrl = publicUrl.publicUrl;
+    console.log('Public URL:', photoUrl);
+
+    if (!photoUrl) {
       console.error('Public URL is null or undefined');
       return;
     }
@@ -47,7 +49,7 @@ document.getElementById('photo-upload-form').addEventListener('submit', async (e
     // Save the photo URL, name, description, and type to the sandwiches table
     const { data: sandwichData, error: insertError } = await supabase
       .from('sandwiches')
-      .insert([{ name, photo_url: publicURL, description, type }]);
+      .insert([{ name, photo_url: photoUrl, description, type }]);
 
     if (insertError) {
       console.error('Error saving sandwich:', insertError.message);
