@@ -1,0 +1,30 @@
+/* sandwichList.css */
+ul#sandwich-list {
+  list-style-type: none;
+  padding: 0;
+}
+
+ul#sandwich-list li {
+  background-color: #fff;
+  padding: 20px;
+  margin-bottom: 10px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+}
+
+ul#sandwich-list li img {
+  max-width: 200px;
+  border-radius: 8px;
+  margin-right: 20px;
+}
+
+ul#sandwich-list li h3 {
+  margin: 0 0 10px 0;
+}
+
+ul#sandwich-list li p {
+  margin: 0;
+  color: #555;
+}
