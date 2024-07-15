@@ -27,7 +27,7 @@ document.getElementById('photo-upload-form').addEventListener('submit', async (e
     console.log('Photo uploaded:', uploadData);
 
     // Generate public URL for the uploaded file
-    const { publicUrl, error: urlError } = supabase.storage
+    const { data: publicUrlData, error: urlError } = await supabase.storage
       .from('photos')
       .getPublicUrl(`public/${fileName}`);
 
@@ -36,9 +36,9 @@ document.getElementById('photo-upload-form').addEventListener('submit', async (e
       return;
     }
 
-    console.log('Public URL Data:', publicUrl);
+    console.log('Public URL Data:', publicUrlData);
 
-    const photoUrl = publicUrl.publicUrl;
+    const photoUrl = publicUrlData.publicUrl;
     console.log('Public URL:', photoUrl);
 
     if (!photoUrl) {
@@ -65,7 +65,7 @@ document.getElementById('photo-upload-form').addEventListener('submit', async (e
 async function fetchSandwiches() {
   const { data, error } = await supabase
     .from('sandwiches')
-    .select('photo_url, description, name, type');
+    .select('photo_url, description, name, type, date');
 
   if (error) {
     console.error('Error fetching sandwiches:', error.message);
@@ -82,10 +82,17 @@ function displaySandwiches(sandwiches) {
   sandwiches.forEach(sandwich => {
     const listItem = document.createElement('li');
     listItem.innerHTML = `
-      <h3>${sandwich.name}</h3>
-      <p>Type: ${sandwich.type}</p>
-      <p>${sandwich.description}</p>
-      <img src="${sandwich.photo_url}" alt="Sandwich Image" width="200">
+      <div class="content">
+        <img src="${sandwich.photo_url}" alt="Sandwich Image">
+        <div class="details">
+          <h3>${sandwich.name}</h3>
+          <p>${sandwich.description}</p>
+        </div>
+      </div>
+      <div class="meta">
+        <span class="type">${sandwich.type}</span>
+        <span class="date">${new Date(sandwich.date).toLocaleDateString()}</span>
+      </div>
     `;
     sandwichList.appendChild(listItem);
   });
