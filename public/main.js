@@ -1,5 +1,5 @@
 // main.js
-import './src/photoUpload.js';
+import 'photoUpload.js';
 
 document.addEventListener('DOMContentLoaded', () => {
   console.log('Application initialized');
