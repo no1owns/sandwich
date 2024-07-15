@@ -1,5 +1,4 @@
 // public/src/photoUpload.js
-import { supabase } from './supabaseConfig.js';
 
 console.log('photoUpload.js loaded');
 
