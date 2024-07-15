@@ -1,5 +1,5 @@
 // public/dataOperations.js
-import { supabase } from '../src/supabaseConfig.js';
+import { supabase } from './src/supabaseConfig.js';
 
 async function fetchSandwiches() {
   const { data, error } = await supabase

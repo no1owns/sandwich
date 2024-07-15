@@ -1,5 +1,5 @@
 // public/authState.js
-import { supabase } from '../src/supabaseConfig.js';
+import { supabase } from './src/supabaseConfig.js';
 
 supabase.auth.onAuthStateChange((event, session) => {
   if (session) {

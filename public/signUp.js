@@ -1,5 +1,5 @@
 // public/signUp.js
-import { supabase } from '../src/supabaseConfig.js';
+import { supabase } from './src/supabaseConfig.js';
 
 document.getElementById('sign-up-google').addEventListener('click', async () => {
   const { user, session, error } = await supabase.auth.signIn({
