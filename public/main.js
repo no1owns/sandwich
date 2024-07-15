@@ -1,5 +1,5 @@
 // main.js
-import './src/photoUpload.js';
+import 'photoUpload.js';
 
 // Additional initialization code can go here if needed
 
