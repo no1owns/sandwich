@@ -1,9 +1,13 @@
 // public/src/photoUpload.js
 import { supabase } from './supabaseConfig.js';
 
+console.log('photoUpload.js loaded');
+
 document.getElementById('photo-upload-form').addEventListener('submit', async (e) => {
   e.preventDefault();
   
+  console.log('Form submitted');
+
   const file = document.getElementById('photo-upload').files[0];
   const name = document.getElementById('sandwich-name').value;
   const description = document.getElementById('photo-description').value;
