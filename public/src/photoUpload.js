@@ -5,7 +5,7 @@ console.log('photoUpload.js loaded');
 
 document.getElementById('photo-upload-form').addEventListener('submit', async (e) => {
   e.preventDefault();
-  
+
   console.log('Form submitted');
 
   const file = document.getElementById('photo-upload').files[0];
