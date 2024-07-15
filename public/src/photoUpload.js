@@ -1,4 +1,4 @@
-// src/photoUpload.js
+// public/src/photoUpload.js
 import { supabase } from './supabaseConfig.js';
 
 document.getElementById('photo-upload-form').addEventListener('submit', async (e) => {
