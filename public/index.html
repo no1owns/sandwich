@@ -5,130 +5,51 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Sandwich Logger App</title>
   <link rel="stylesheet" href="styles.css">
-  <!-- Load Supabase from CDN -->
+  <link rel="stylesheet" href="form.css">
+  <link rel="stylesheet" href="sandwichList.css">
+  <link rel="icon" href="favicon.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="android-chrome-192x192.png">
+  <link rel="icon" type="image/png" sizes="512x512" href="android-chrome-512x512.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+  <link rel="mask-icon" href="safari-pinned-tab.svg" color="#5bbad5">
+  <meta name="msapplication-TileColor" content="#2b5797">
+  <meta name="msapplication-TileImage" content="mstile-150x150.png">
+  <!-- Include Supabase from CDN -->
   <script type="module">
     import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
 
     const supabaseUrl = 'https://uzjaizmdgwfyiixwspdp.supabase.co'; // Replace with your Supabase URL
-    const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV6amFpem1kZ3dmeWlpeHdzcGRwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTk0NTAyNTUsImV4cCI6MjAzNTAyNjI1NX0.7HEUiRGbVWTv8St_PEcwiTVjazkCRDwK324oPJuF7Ns';
+    const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV6amFpem1kZ3dmeWlpeHdzcGRwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTk0NTAyNTUsImV4cCI6MjAzNTAyNjI1NX0.7HEUiRGbVWTv8St_PEcwiTVjazkCRDwK324oPJuF7Ns'; // Replace with your Supabase anon key
 
     const supabase = createClient(supabaseUrl, supabaseKey);
 
-    document.addEventListener('DOMContentLoaded', () => {
-      // Photo Upload
-      document.getElementById('photo-upload-form').addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const file = document.getElementById('photo-upload').files[0];
-        const name = document.getElementById('sandwich-name').value;
-        const description = document.getElementById('photo-description').value;
-        const type = document.getElementById('sandwich-type').value;
-
-        if (file && name && description && type) {
-          const fileName = `${Date.now()}-${file.name}`; // Ensure unique file names
-
-          console.log('Uploading file:', fileName);
-
-          // Upload the file
-          const { data: uploadData, error: uploadError } = await supabase.storage
-            .from('photos')
-            .upload(`public/${fileName}`, file);
-
-          if (uploadError) {
-            console.error('Error uploading photo:', uploadError.message);
-            return;
-          }
-
-          console.log('Photo uploaded:', uploadData);
-
-          // Generate public URL for the uploaded file
-          const { data: publicUrlData, error: urlError } = await supabase.storage
-            .from('photos')
-            .getPublicUrl(`public/${fileName}`);
-
-          if (urlError) {
-            console.error('Error getting public URL:', urlError.message);
-            return;
-          }
-
-          console.log('Public URL Data:', publicUrlData);
-
-          const photoUrl = publicUrlData.publicUrl;
-          console.log('Public URL:', photoUrl);
-
-          if (!photoUrl) {
-            console.error('Public URL is null or undefined');
-            return;
-          }
-
-          // Save the photo URL, name, description, and type to the sandwiches table
-          const { data: sandwichData, error: insertError } = await supabase
-            .from('sandwiches')
-            .insert([{ name, photo_url: photoUrl, description, type }]);
-
-          if (insertError) {
-            console.error('Error saving sandwich:', insertError.message);
-          } else {
-            console.log('Sandwich saved:', sandwichData);
-            // Refresh the sandwich list
-            await fetchSandwiches();
-          }
-        }
-      });
-
-      // Fetch and Display Sandwiches
-      async function fetchSandwiches() {
-        const { data, error } = await supabase
-          .from('sandwiches')
-          .select('photo_url, description, name, type');
-
-        if (error) {
-          console.error('Error fetching sandwiches:', error.message);
-        } else {
-          console.log('Sandwiches fetched:', data);
-          displaySandwiches(data);
-        }
-      }
-
-      function displaySandwiches(sandwiches) {
-        const sandwichList = document.getElementById('sandwich-list');
-        sandwichList.innerHTML = '';
-
-        sandwiches.forEach(sandwich => {
-          const listItem = document.createElement('li');
-          listItem.innerHTML = `
-            <h3>${sandwich.name}</h3>
-            <p>Type: ${sandwich.type}</p>
-            <p>${sandwich.description}</p>
-            <img src="${sandwich.photo_url}" alt="Sandwich Image" width="200">
-          `;
-          sandwichList.appendChild(listItem);
-        });
-      }
-
-      // Initial fetch of sandwiches
-      fetchSandwiches();
-    });
+    export { supabase };
   </script>
+  <script type="module" src="main.js"></script>
 </head>
 <body>
-  <h1>Sandwich Logger App</h1>
+  <div class="container">
+    <h1>Sandwich Logger App</h1>
 
-  <!-- Photo Upload Form -->
-  <h2>Upload a Sandwich Photo</h2>
-  <form id="photo-upload-form">
-    <input type="text" id="sandwich-name" placeholder="Sandwich Name" required>
-    <input type="file" id="photo-upload" required>
-    <input type="text" id="photo-description" placeholder="Description" required>
-    <select id="sandwich-type" required>
-      <option value="" disabled selected>Select Sandwich Type</option>
-      <option value="establishment">Establishment</option>
-      <option value="homemade">Homemade</option>
-    </select>
-    <button type="submit">Upload Photo</button>
-  </form>
+    <!-- Photo Upload Form -->
+    <h2>Upload a Sandwich Photo</h2>
+    <form id="photo-upload-form">
+      <input type="text" id="sandwich-name" placeholder="Sandwich Name" required>
+      <input type="file" id="photo-upload" required>
+      <input type="text" id="photo-description" placeholder="Description" required>
+      <select id="sandwich-type" required>
+        <option value="" disabled selected>Select Sandwich Type</option>
+        <option value="establishment">Establishment</option>
+        <option value="homemade">Homemade</option>
+      </select>
+      <button type="submit">Upload Photo</button>
+    </form>
 
-  <!-- Sandwich List Container -->
-  <h2>Sandwich List</h2>
-  <ul id="sandwich-list"></ul>
+    <!-- Sandwich List Container -->
+    <h2>Sandwich List</h2>
+    <ul id="sandwich-list"></ul>
+  </div>
 </body>
 </html>
