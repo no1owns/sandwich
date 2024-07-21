@@ -1,7 +1,8 @@
 // src/supabaseConfig.js
-const supabaseUrl = window.SUPABASE_URL;
-const supabaseKey = window.SUPABASE_KEY;
-
-export const supabase = supabase.createClient(supabaseUrl, supabaseKey);
-
-console.log('supabaseConfig.js loaded');
+if (!window.SUPABASE_URL || !window.SUPABASE_KEY) {
+    throw new Error('Supabase URL and Key must be defined');
+  }
+  
+  export const supabase = supabase.createClient(window.SUPABASE_URL, window.SUPABASE_KEY);
+  
+  console.log('supabaseConfig.js loaded');  
