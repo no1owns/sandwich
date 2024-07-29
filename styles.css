@@ -1,10 +1,10 @@
 /* styles.css */
+
 body {
   font-family: 'Roboto', sans-serif;
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  background-color: #f4f4f9;
 }
 
 .container {
@@ -16,4 +16,80 @@ body {
 h1, h2 {
   text-align: center;
   font-weight: 500;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+input, select, button {
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-family: 'Roboto', sans-serif;
+}
+
+button {
+  background-color: #28a745;
+  color: white;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+button:hover {
+  background-color: #218838;
+}
+
+#sandwich-list {
+  list-style: none;
+  padding: 0;
+}
+
+#sandwich-list li {
+  border: 1px solid #ccc;
+  margin: 10px 0;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.content {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.content img {
+  max-width: 100px;
+  max-height: 100px;
+}
+
+.details {
+  display: flex;
+  flex-direction: column;
+}
+
+.meta {
+  display: flex;
+  gap: 10px;
+  font-size: 14px;
+  color: #666;
+}
+
+@media (max-width: 600px) {
+  .content {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .content img {
+    max-width: 80px;
+    max-height: 80px;
+  }
 }

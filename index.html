@@ -18,8 +18,8 @@
   <meta name="msapplication-TileImage" content="mstile-150x150.png">
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
   <script>
-    window.SUPABASE_URL = 'https://uzjaizmdgwfyiixwspdp.supabase.co'; // Replace with your Supabase URL
-    window.SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV6amFpem1kZ3dmeWlpeHdzcGRwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTk0NTAyNTUsImV4cCI6MjAzNTAyNjI1NX0.7HEUiRGbVWTv8St_PEcwiTVjazkCRDwK324oPJuF7Ns'; // Replace with your Supabase anon key
+    window.SUPABASE_URL = 'https://uzjaizmdgwfyiixwspdp.supabase.co';
+    window.SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV6amFpem1kZ3dmeWlpeHdzcGRwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTk0NTAyNTUsImV4cCI6MjAzNTAyNjI1NX0.7HEUiRGbVWTv8St_PEcwiTVjazkCRDwK324oPJuF7Ns';
   </script>
   <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
   <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/mobilenet"></script>
@@ -33,28 +33,21 @@
 
     <!-- Photo Upload Form -->
     <h2>Upload a Sandwich Photo</h2>
-    <form id="photo-upload-form" class="form-inline">
-      <label for="photo-upload" class="file-input-label">Choose a photo...</label>
-      <input type="file" id="photo-upload" required>
-      <button type="submit">Process Photo</button>
-    </form>
-
-    <!-- Sandwich Details Form -->
-    <h2>Sandwich Details</h2>
-    <form id="sandwich-details-form" class="sandwich-details-form" style="display:none;">
+    <form id="photo-upload-form">
       <input type="text" id="sandwich-name" placeholder="Sandwich Name" required>
-      <textarea id="photo-description" placeholder="Description" required></textarea>
+      <input type="file" id="photo-upload" required>
+      <input type="text" id="photo-description" placeholder="Description" required>
       <select id="sandwich-type" required>
         <option value="" disabled selected>Select Sandwich Type</option>
         <option value="establishment">Establishment</option>
         <option value="homemade">Homemade</option>
       </select>
-      <button type="submit">Save Sandwich</button>
+      <button type="submit">Upload Photo</button>
     </form>
 
     <!-- Sandwich List Container -->
     <h2>Sandwich List</h2>
-    <div id="sandwich-list" class="sandwich-grid"></div>
+    <ul id="sandwich-list"></ul>
   </div>
 </body>
 </html>
