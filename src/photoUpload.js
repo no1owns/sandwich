@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const file = document.getElementById('photo-upload').files[0];
     if (file) {
       uploadedFile = file;
-      processPhoto(file);
+      await processPhoto(file);
     } else {
       alert('Please select a file.');
     }
