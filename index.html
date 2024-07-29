@@ -33,15 +33,21 @@
     <!-- Photo Upload Form -->
     <h2>Upload a Sandwich Photo</h2>
     <form id="photo-upload-form">
-      <input type="text" id="sandwich-name" placeholder="Sandwich Name" required>
       <input type="file" id="photo-upload" required>
-      <input type="text" id="photo-description" placeholder="Description" required>
+      <button type="submit">Process Photo</button>
+    </form>
+
+    <!-- Sandwich Details Form -->
+    <h2>Sandwich Details</h2>
+    <form id="sandwich-details-form" style="display:none;">
+      <input type="text" id="sandwich-name" placeholder="Sandwich Name" required>
+      <textarea id="photo-description" placeholder="Description" required></textarea>
       <select id="sandwich-type" required>
         <option value="" disabled selected>Select Sandwich Type</option>
         <option value="establishment">Establishment</option>
         <option value="homemade">Homemade</option>
       </select>
-      <button type="submit">Upload Photo</button>
+      <button type="submit">Save Sandwich</button>
     </form>
 
     <!-- Sandwich List Container -->
