@@ -116,14 +116,13 @@ document.addEventListener('DOMContentLoaded', () => {
     sandwichList.innerHTML = '';
 
     sandwiches.forEach(sandwich => {
-      const listItem = document.createElement('li');
+      const listItem = document.createElement('div');
+      listItem.className = 'sandwich-item';
       listItem.innerHTML = `
-        <div class="content">
-          <img src="${sandwich.photo_url}" alt="Sandwich Image">
-          <div class="details">
-            <h3>${sandwich.name}</h3>
-            <p>${sandwich.description}</p>
-          </div>
+        <img src="${sandwich.photo_url}" alt="Sandwich Image">
+        <div class="details">
+          <h3>${sandwich.name}</h3>
+          <p>${sandwich.description}</p>
         </div>
         <div class="meta">
           <span class="type">${sandwich.type}</span>
