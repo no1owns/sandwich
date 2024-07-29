@@ -6,7 +6,14 @@ console.log('photoUpload.js loaded');
 document.addEventListener('DOMContentLoaded', () => {
   const photoUploadForm = document.getElementById('photo-upload-form');
   const sandwichDetailsForm = document.getElementById('sandwich-details-form');
+  const fileInputLabel = document.querySelector('.file-input-label');
+  const fileInput = document.getElementById('photo-upload');
   let uploadedFile = null;
+
+  fileInput.addEventListener('change', (e) => {
+    const fileName = e.target.files[0]?.name || 'Choose a photo...';
+    fileInputLabel.textContent = fileName;
+  });
 
   photoUploadForm.addEventListener('submit', async (e) => {
     e.preventDefault();
@@ -79,6 +86,7 @@ document.addEventListener('DOMContentLoaded', () => {
         alert('Sandwich saved successfully!');
         sandwichDetailsForm.reset();
         sandwichDetailsForm.style.display = 'none';
+        fileInputLabel.textContent = 'Choose a photo...';
       } catch (error) {
         console.error('Error:', error.message);
         alert(`Error: ${error.message}`);
