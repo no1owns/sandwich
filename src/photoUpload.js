@@ -7,76 +7,70 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('photo-upload-form').addEventListener('submit', async (e) => {
     e.preventDefault();
 
-    console.log('Form submitted');
-
     const file = document.getElementById('photo-upload').files[0];
     const name = document.getElementById('sandwich-name').value;
     const description = document.getElementById('photo-description').value;
     const type = document.getElementById('sandwich-type').value;
 
     if (file && name && description && type) {
-      const fileName = `${Date.now()}-${file.name}`; // Ensure unique file names
+      const fileName = `${Date.now()}-${file.name}`;
 
-      console.log('Uploading file:', fileName);
+      try {
+        const { data: uploadData, error: uploadError } = await supabase.storage
+          .from('photos')
+          .upload(`public/${fileName}`, file);
 
-      // Upload the file
-      const { data: uploadData, error: uploadError } = await supabase.storage
-        .from('photos')
-        .upload(`public/${fileName}`, file);
+        if (uploadError) throw uploadError;
 
-      if (uploadError) {
-        console.error('Error uploading photo:', uploadError.message);
-        return;
+        const { data: publicUrlData, error: urlError } = await supabase.storage
+          .from('photos')
+          .getPublicUrl(`public/${fileName}`);
+
+        if (urlError) throw urlError;
+
+        const photoUrl = publicUrlData.publicUrl;
+        if (!photoUrl) throw new Error('Public URL is null or undefined');
+
+        // Load the image and perform image recognition using TensorFlow.js
+        const img = new Image();
+        img.src = URL.createObjectURL(file);
+        img.onload = async () => {
+          const model = await mobilenet.load();
+          const predictions = await model.classify(img);
+          console.log('Predictions:', predictions);
+
+          const labels = predictions.map(prediction => prediction.className).join(', ');
+
+          const { data: sandwichData, error: insertError } = await supabase
+            .from('sandwiches')
+            .insert([{ name, photo_url: photoUrl, description: `${description} (Labels: ${labels})`, type }]);
+
+          if (insertError) throw insertError;
+
+          await fetchSandwiches();
+          alert('Sandwich uploaded successfully! Image labels: ' + labels);
+        };
+      } catch (error) {
+        console.error('Error:', error.message);
+        alert(`Error: ${error.message}`);
       }
-
-      console.log('Photo uploaded:', uploadData);
-
-      // Generate public URL for the uploaded file
-      const { data: publicUrlData, error: urlError } = await supabase.storage
-        .from('photos')
-        .getPublicUrl(`public/${fileName}`);
-
-      if (urlError) {
-        console.error('Error getting public URL:', urlError.message);
-        return;
-      }
-
-      console.log('Public URL Data:', publicUrlData);
-
-      const photoUrl = publicUrlData.publicUrl;
-      console.log('Public URL:', photoUrl);
-
-      if (!photoUrl) {
-        console.error('Public URL is null or undefined');
-        return;
-      }
-
-      // Save the photo URL, name, description, and type to the sandwiches table
-      const { data: sandwichData, error: insertError } = await supabase
-        .from('sandwiches')
-        .insert([{ name, photo_url: photoUrl, description, type }]);
-
-      if (insertError) {
-        console.error('Error saving sandwich:', insertError.message);
-      } else {
-        console.log('Sandwich saved:', sandwichData);
-        // Refresh the sandwich list
-        await fetchSandwiches();
-      }
+    } else {
+      alert('Please fill in all fields and select a file.');
     }
   });
 
-  // Fetch and Display Sandwiches
   async function fetchSandwiches() {
-    const { data, error } = await supabase
-      .from('sandwiches')
-      .select('photo_url, description, name, type, date');
+    try {
+      const { data, error } = await supabase
+        .from('sandwiches')
+        .select('photo_url, description, name, type, date');
 
-    if (error) {
-      console.error('Error fetching sandwiches:', error.message);
-    } else {
-      console.log('Sandwiches fetched:', data);
+      if (error) throw error;
+
       displaySandwiches(data);
+    } catch (error) {
+      console.error('Error fetching sandwiches:', error.message);
+      alert(`Error fetching sandwiches: ${error.message}`);
     }
   }
 
@@ -103,6 +97,5 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Initial fetch of sandwiches
   fetchSandwiches();
 });
