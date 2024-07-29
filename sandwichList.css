@@ -1,83 +1,49 @@
 /* sandwichList.css */
-ul#sandwich-list {
-  list-style-type: none;
-  padding: 0;
-  margin: 0;
+#sandwich-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
 }
 
-ul#sandwich-list li {
+.sandwich-item {
+  border: 1px solid #ccc;
+  padding: 10px;
+  border-radius: 5px;
+  text-align: center;
   background-color: #fff;
-  padding: 15px;
-  margin-bottom: 10px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  display: flex;
-  flex-direction: column;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-  transition: background-color 0.3s;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s;
 }
 
-ul#sandwich-list li:hover {
-  background-color: #f9f9f9;
+.sandwich-item:hover {
+  transform: scale(1.05);
 }
 
-ul#sandwich-list li .content {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-}
-
-ul#sandwich-list li img {
-  max-width: 150px;
-  width: 100%;
+.sandwich-item img {
+  max-width: 100%;
   height: auto;
-  border-radius: 4px;
-  margin-right: 20px;
-  object-fit: cover;
+  border-radius: 5px;
 }
 
-ul#sandwich-list li .details {
-  flex: 1;
+.sandwich-item .details {
+  margin-top: 10px;
+  font-size: 16px;
 }
 
-ul#sandwich-list li h3 {
-  margin: 0;
-  font-size: 1.2em;
-  color: #333;
-}
-
-ul#sandwich-list li p {
-  margin: 5px 0;
-  color: #555;
-}
-
-ul#sandwich-list li .meta {
+.sandwich-item .meta {
+  margin-top: 5px;
+  font-size: 14px;
+  color: #666;
   display: flex;
   justify-content: space-between;
-  margin-top: 10px;
-  font-size: 0.9em;
-  color: #999;
-}
-
-ul#sandwich-list li .meta .type {
-  text-transform: capitalize;
 }
 
 @media (max-width: 600px) {
-  ul#sandwich-list li {
-    padding: 10px;
+  #sandwich-list {
+    grid-template-columns: 1fr;
   }
 
-  ul#sandwich-list li img {
-    margin-right: 10px;
-  }
-
-  ul#sandwich-list li h3 {
-    font-size: 1em;
-  }
-
-  ul#sandwich-list li .meta {
-    flex-direction: column;
-    align-items: flex-start;
+  .sandwich-item {
+    padding: 5px;
   }
 }
