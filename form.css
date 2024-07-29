@@ -10,6 +10,13 @@ form {
   display: flex;
   align-items: center;
   gap: 10px;
+  flex-wrap: wrap;
+}
+
+.sandwich-details-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
 }
 
 input, select, button, textarea {
@@ -18,6 +25,8 @@ input, select, button, textarea {
   border: 1px solid #ccc;
   border-radius: 5px;
   font-family: 'Roboto', sans-serif;
+  flex: 1;
+  min-width: 0; /* Prevents items from overflowing */
 }
 
 button {
@@ -40,6 +49,8 @@ button:hover {
   font-size: 16px;
   text-align: center;
   cursor: pointer;
+  flex: 1;
+  min-width: 0; /* Prevents items from overflowing */
 }
 
 #photo-upload {
