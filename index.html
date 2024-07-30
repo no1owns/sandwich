@@ -34,16 +34,25 @@
     <!-- Photo Upload Form -->
     <h2>Upload a Sandwich Photo</h2>
     <form id="photo-upload-form">
-      <input type="text" id="sandwich-name" placeholder="Sandwich Name" required>
       <input type="file" id="photo-upload" required>
-      <input type="text" id="photo-description" placeholder="Description" required>
-      <select id="sandwich-type" required>
-        <option value="" disabled selected>Select Sandwich Type</option>
-        <option value="establishment">Establishment</option>
-        <option value="homemade">Homemade</option>
-      </select>
-      <button type="submit">Upload Photo</button>
+      <div id="form-fields" style="display:none;">
+        <input type="text" id="sandwich-name" placeholder="Sandwich Name" required>
+        <input type="text" id="photo-description" placeholder="Description" required>
+        <select id="sandwich-type" required>
+          <option value="" disabled selected>Select Sandwich Type</option>
+          <option value="establishment">Establishment</option>
+          <option value="homemade">Homemade</option>
+        </select>
+        <button type="submit">Upload Sandwich</button>
+      </div>
     </form>
+
+    <!-- Processing Modal -->
+    <div id="processing-modal" class="modal">
+      <div class="modal-content">
+        <p>Processing image, please wait...</p>
+      </div>
+    </div>
 
     <!-- Sandwich List Container -->
     <h2>Sandwich List</h2>

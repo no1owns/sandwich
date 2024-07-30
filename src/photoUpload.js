@@ -4,15 +4,16 @@ import { supabase } from './supabaseConfig.js';
 console.log('photoUpload.js loaded');
 
 document.addEventListener('DOMContentLoaded', () => {
-  document.getElementById('photo-upload-form').addEventListener('submit', async (e) => {
+  const photoUploadForm = document.getElementById('photo-upload-form');
+  const formFields = document.getElementById('form-fields');
+  const processingModal = document.getElementById('processing-modal');
+  const photoUploadInput = document.getElementById('photo-upload');
+
+  photoUploadInput.addEventListener('change', async (e) => {
     e.preventDefault();
-
-    const file = document.getElementById('photo-upload').files[0];
-    const name = document.getElementById('sandwich-name').value;
-    const description = document.getElementById('photo-description').value;
-    const type = document.getElementById('sandwich-type').value;
-
-    if (file && name && description && type) {
+    const file = photoUploadInput.files[0];
+    if (file) {
+      processingModal.style.display = 'block';
       const fileName = `${Date.now()}-${file.name}`;
 
       try {
@@ -41,21 +42,46 @@ document.addEventListener('DOMContentLoaded', () => {
 
           const labels = predictions.map(prediction => prediction.className).join(', ');
 
-          const { data: sandwichData, error: insertError } = await supabase
-            .from('sandwiches')
-            .insert([{ name, photo_url: photoUrl, description: `${description} (Labels: ${labels})`, type }]);
+          // Populate hidden fields with prediction results
+          document.getElementById('photo-description').value = `Labels: ${labels}`;
+          document.getElementById('photo-url').value = photoUrl;
 
-          if (insertError) throw insertError;
-
-          await fetchSandwiches();
-          alert('Sandwich uploaded successfully! Image labels: ' + labels);
+          // Show form fields
+          formFields.style.display = 'block';
+          processingModal.style.display = 'none';
         };
+      } catch (error) {
+        console.error('Error:', error.message);
+        alert(`Error: ${error.message}`);
+        processingModal.style.display = 'none';
+      }
+    }
+  });
+
+  photoUploadForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const name = document.getElementById('sandwich-name').value;
+    const description = document.getElementById('photo-description').value;
+    const type = document.getElementById('sandwich-type').value;
+    const photoUrl = document.getElementById('photo-url').value;
+
+    if (name && description && type && photoUrl) {
+      try {
+        const { data: sandwichData, error: insertError } = await supabase
+          .from('sandwiches')
+          .insert([{ name, photo_url: photoUrl, description, type }]);
+
+        if (insertError) throw insertError;
+
+        await fetchSandwiches();
+        alert('Sandwich uploaded successfully!');
       } catch (error) {
         console.error('Error:', error.message);
         alert(`Error: ${error.message}`);
       }
     } else {
-      alert('Please fill in all fields and select a file.');
+      alert('Please fill in all fields.');
     }
   });
 
