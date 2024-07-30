@@ -31,25 +31,31 @@
   <div class="container">
     <h1>Sandwich Logger App</h1>
 
-    <!-- Photo Upload Form -->
-    <h2>Upload a Sandwich Photo</h2>
-    <form id="photo-upload-form">
-      <div class="photo-upload-container">
-        <input type="file" id="photo-upload" required>
-        <button id="photo-upload-button" type="button">Upload Photo</button>
+    <div class="form-container">
+      <!-- Upload Section -->
+      <div class="upload-section">
+        <h2>Upload a Sandwich Photo</h2>
+        <div class="photo-upload-container">
+          <input type="file" id="photo-upload" required>
+          <button id="photo-upload-button" type="button">Upload Photo</button>
+        </div>
       </div>
-      <div id="form-fields" style="display:none;">
-        <input type="hidden" id="photo-url">
-        <input type="text" id="sandwich-name" placeholder="Sandwich Name" required>
-        <input type="text" id="photo-description" placeholder="Description" required>
-        <select id="sandwich-type" required>
-          <option value="" disabled selected>Select Sandwich Type</option>
-          <option value="establishment">Establishment</option>
-          <option value="homemade">Homemade</option>
-        </select>
-        <button type="submit">Upload Sandwich</button>
-      </div>
-    </form>
+
+      <!-- Form Fields -->
+      <form id="photo-upload-form">
+        <div id="form-fields" style="display:none;">
+          <input type="hidden" id="photo-url">
+          <input type="text" id="sandwich-name" placeholder="Sandwich Name" required>
+          <input type="text" id="photo-description" placeholder="Description" required>
+          <select id="sandwich-type" required>
+            <option value="" disabled selected>Select Sandwich Type</option>
+            <option value="establishment">Establishment</option>
+            <option value="homemade">Homemade</option>
+          </select>
+          <button type="submit">Upload Sandwich</button>
+        </div>
+      </form>
+    </div>
 
     <!-- Processing Modal -->
     <div id="processing-modal" class="modal">
