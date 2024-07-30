@@ -8,8 +8,9 @@ document.addEventListener('DOMContentLoaded', () => {
   const formFields = document.getElementById('form-fields');
   const processingModal = document.getElementById('processing-modal');
   const photoUploadInput = document.getElementById('photo-upload');
+  const photoUploadButton = document.getElementById('photo-upload-button');
 
-  photoUploadInput.addEventListener('change', async (e) => {
+  photoUploadButton.addEventListener('click', async (e) => {
     e.preventDefault();
     const file = photoUploadInput.files[0];
     if (file) {
@@ -49,12 +50,16 @@ document.addEventListener('DOMContentLoaded', () => {
           // Show form fields
           formFields.style.display = 'block';
           processingModal.style.display = 'none';
+          photoUploadButton.style.display = 'none';
+          photoUploadInput.style.display = 'none';
         };
       } catch (error) {
         console.error('Error:', error.message);
         alert(`Error: ${error.message}`);
         processingModal.style.display = 'none';
       }
+    } else {
+      alert('Please select a photo to upload.');
     }
   });
 
