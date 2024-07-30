@@ -3,7 +3,7 @@
 /* General styles for the form elements */
 form {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   gap: 10px;
   max-width: 780;
   margin: 0 auto;
