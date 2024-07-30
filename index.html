@@ -34,8 +34,10 @@
     <!-- Photo Upload Form -->
     <h2>Upload a Sandwich Photo</h2>
     <form id="photo-upload-form">
-      <input type="file" id="photo-upload" required>
-      <button id="photo-upload-button" type="button">Upload Photo</button>
+      <div class="photo-upload-container">
+        <input type="file" id="photo-upload" required>
+        <button id="photo-upload-button" type="button">Upload Photo</button>
+      </div>
       <div id="form-fields" style="display:none;">
         <input type="hidden" id="photo-url">
         <input type="text" id="sandwich-name" placeholder="Sandwich Name" required>
