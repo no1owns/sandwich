@@ -24,37 +24,51 @@
   <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
   <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/mobilenet"></script>
   <script type="module" src="src/supabaseConfig.js"></script>
-  <script type="module" src="src/photoUpload.js"></script>
+  <script type="module" src="src/auth.js"></script>
   <script type="module" src="main.js"></script>
 </head>
 <body>
   <div class="container">
     <h1>Sandwich Logger App</h1>
 
-    <div class="form-container">
-      <!-- Upload Section -->
-      <div class="upload-section">
-        <h2>Upload a Sandwich Photo</h2>
-        <div class="photo-upload-container">
-          <input type="file" id="photo-upload" required>
-          <button id="photo-upload-button" type="button">Upload Photo</button>
+    <!-- Authentication Section -->
+    <div id="auth-section" class="auth-container">
+      <h2>Login to Continue</h2>
+      <button id="login-button" class="auth-button">Login with Google</button>
+      <button id="logout-button" class="auth-button" style="display:none;">Logout</button>
+    </div>
+
+    <!-- Main Content - Hidden until login -->
+    <div id="main-content" style="display:none;">
+      <div class="form-container">
+        <!-- Upload Section -->
+        <div class="upload-section">
+          <h2>Upload a Sandwich Photo</h2>
+          <div class="photo-upload-container">
+            <input type="file" id="photo-upload" required>
+            <button id="photo-upload-button" type="button">Upload Photo</button>
+          </div>
         </div>
+
+        <!-- Form Fields -->
+        <form id="photo-upload-form">
+          <div id="form-fields" style="display:none;">
+            <input type="hidden" id="photo-url">
+            <input type="text" id="sandwich-name" placeholder="Sandwich Name" required>
+            <input type="text" id="photo-description" placeholder="Description" required>
+            <select id="sandwich-type" required>
+              <option value="" disabled selected>Select Sandwich Type</option>
+              <option value="establishment">Establishment</option>
+              <option value="homemade">Homemade</option>
+            </select>
+            <button type="submit">Upload Sandwich</button>
+          </div>
+        </form>
       </div>
 
-      <!-- Form Fields -->
-      <form id="photo-upload-form">
-        <div id="form-fields" style="display:none;">
-          <input type="hidden" id="photo-url">
-          <input type="text" id="sandwich-name" placeholder="Sandwich Name" required>
-          <input type="text" id="photo-description" placeholder="Description" required>
-          <select id="sandwich-type" required>
-            <option value="" disabled selected>Select Sandwich Type</option>
-            <option value="establishment">Establishment</option>
-            <option value="homemade">Homemade</option>
-          </select>
-          <button type="submit">Upload Sandwich</button>
-        </div>
-      </form>
+      <!-- Sandwich List Container -->
+      <h2>Sandwich List</h2>
+      <ul id="sandwich-list"></ul>
     </div>
 
     <!-- Processing Modal -->
@@ -63,10 +77,6 @@
         <p>Processing image, please wait...</p>
       </div>
     </div>
-
-    <!-- Sandwich List Container -->
-    <h2>Sandwich List</h2>
-    <ul id="sandwich-list"></ul>
   </div>
 </body>
 </html>
